@@ -1,0 +1,8 @@
+from sqlalchemy.orm import Session
+
+from app.models import AuditLog
+
+def audit(db: Session, user_id, action: str, entity_type: str,
+          entity_id, details: dict | None = None) -> None:
+    db.add(AuditLog(user_id=user_id, action=action, entity_type=entity_type,
+           entity_id=str(entity_id), details=details))

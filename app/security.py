@@ -27,7 +27,7 @@ def hash_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
 def create_access_token(user: User) -> str:
-    expires = datetime.now(timezone.utc) + timedelta(minutes=settings.jwt_access_token_expire_minutes)
+    expires = datetime.now(timezone.utc) + timedelta(minutes=settings.jwt_expire_minutes)
     payload = {"sub": str(user.id), "role": user.role, "exp": expires}
     return jwt.encode(payload, settings.jwt_secret, algorithm=ALGORITHM)
 
