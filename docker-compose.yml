@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: lumigrid
+      POSTGRES_PASSWORD: lumigrid
+      POSTGRES_DB: lumigrid
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - lumigrid_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lumigrid"]
+      interval: 3s
+      retries: 10
+
+  api:
+    build: .
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/code
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  lumigrid_pg:
