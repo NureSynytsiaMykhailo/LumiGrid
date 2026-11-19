@@ -56,8 +56,8 @@ def confirm_command(command_id: uuid.UUID, data: CommandResult,
     cmd = db.get(Command, command_id)
     if cmd is None or cmd.luminaire_id != lum.id:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Команду не знайдено")
-    if cmd.status is not ("pending", "sent"):
-        return {"status", cmd.status}
+    if cmd.status not in ("pending", "sent"):
+        return {"status": cmd.status}
 
     now = datetime.now(timezone.utc)
     cmd.confirmed_at = now
