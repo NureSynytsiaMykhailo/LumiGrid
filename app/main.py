@@ -1,10 +1,25 @@
-from fastapi import FastAPI
-from app.routers import auth, groups, luminaires, profiles, users
-app = FastAPI(title="LumiGrid API", version="0.2.0")
+import asyncio
+from contextlib import asynccontextmanager
 
-for module in (auth, users, profiles, groups, luminaires):
+from fastapi import FastAPI
+
+from app.routers import (
+    auth, device, groups, luminaires, monitoring, overrides, profiles, rules, users,
+)
+from app.worker import worker_loop
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(worker_loop())
+    yield
+    task.cancel()
+
+app = FastAPI(title="LumiGrid API", version="0.3.0", lifespan=lifespan)
+
+for module in (auth, users, profiles, groups, luminaires, rules,
+               overrides, monitoring, device):
     app.include_router(module.router)
 
-@app.get("/health")
+@app.get("/health", tags=["system"])
 def health():
     return {"status": "ok"}

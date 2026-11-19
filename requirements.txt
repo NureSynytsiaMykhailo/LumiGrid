@@ -8,3 +8,4 @@ bcrypt
 bcrypt
 pyjwt
 python-multipart
+tzdata
