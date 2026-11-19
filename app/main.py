@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.routers import (
-    auth, device, groups, luminaires, monitoring, overrides, profiles, rules, users,
+    acts, auth, device, groups, luminaires, monitoring, overrides, profiles, rules, users,
 )
 from app.worker import worker_loop
 
@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="LumiGrid API", version="0.3.0", lifespan=lifespan)
 
 for module in (auth, users, profiles, groups, luminaires, rules,
-               overrides, monitoring, device):
+               overrides, monitoring, device, acts):
     app.include_router(module.router)
 
 @app.get("/health", tags=["system"])

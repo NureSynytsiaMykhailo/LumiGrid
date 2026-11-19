@@ -232,3 +232,26 @@ class DeviceConfig(BaseModel):
     max_current_ma: float
     default_profile: ProfileIn | None
     rules: list[DeviceRule]
+
+class ActIn(BaseModel):
+    id: uuid.UUID
+    luminaire_id: uuid.UUID
+    deviation_id: uuid.UUID | None = None
+    work_description: str = Field(min_length=1)
+    created_offline_at: AwareDatetime
+
+
+class PhotoOut(ORM):
+    id: uuid.UUID
+    created_at: datetime
+
+
+class ActOut(ORM):
+    id: uuid.UUID
+    luminaire_id: uuid.UUID
+    technician_id: uuid.UUID
+    deviation_id: uuid.UUID | None
+    work_description: str
+    created_offline_at: datetime
+    synced_at: datetime
+    photos: list[PhotoOut] = []

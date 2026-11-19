@@ -5,7 +5,8 @@ alembic
 psycopg2-binary
 pydantic-settings
 bcrypt
-bcrypt
 pyjwt
 python-multipart
 tzdata
+pytest
+httpx
